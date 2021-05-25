@@ -1,8 +1,7 @@
 const { ApolloServer, gql } = require('apollo-server');
 
-// A schema is a collection of type definitions (hence "typeDefs")
-// that together define the "shape" of queries that are executed against
-// your data.
+//todo : finaliser la query suggestedTripSurvey
+
 const typeDefs = gql`
   type DriverSurvey {
     surveyDriverId: Int!
@@ -68,6 +67,36 @@ const typeDefs = gql`
     showGroupOnly: Boolean
   }
 
+
+  type SuggestedTrips{
+    surveyTripId: Int!
+    labelDay: String!,
+    title: String!
+  }
+
+  type TripDetails{
+    idTrip: Int!
+    departureDay: String!
+    hasDangerousGoods: Boolean
+    drops: [Drop]
+  }
+
+  type Drop{
+    number: Int!
+    appointmentTime: String!
+    clientAddress: String!
+  }
+
+  input QuestionPriority{
+    id: Int!
+    priority: Int!
+  }
+
+  input SelectedDevelopmentChoice{
+    id: Int!
+    selectedChoice: String!
+  }
+
   enum QuestionType{
     DEVELOPMENT,
     CHOICE,
@@ -80,10 +109,63 @@ const typeDefs = gql`
     NUMBER,
     BOOLEAN,
   }
+
+  enum SurveyStatus {
+    ACTIVE
+    COMPLETED
+    ENGINE_PROCESSED
+    ATTRIBUTED
+    CANCELED
+  }
+
+  input DriverSurveySearchCriteria {
+    managerEmployeId: Int
+    driverEmployeId: Int
+    surveyId: Int
+    surveyStatus: SurveyStatus
+    startDate: String
+    endDate: String
+  }
+
+  input DriverSurveyChoices{
+    surveyDriverId: Int!
+    questionPriority: [QuestionPriority]
+    selectedDevelopmentChoice: [SelectedDevelopmentChoice]
+    selectedChoices: [Int]
+  }
   
   type Query {
-    driverSurveysSearch: [DriverSurvey],
-    driverSurvey(surveyDriverId: Int!, languageId: Int!) : DriverSurvey
+    """
+    Get a list of surveys
+    """
+    driverSurveysSearch(criteria: DriverSurveySearchCriteria!, languageId: Int!): [DriverSurvey],
+    
+    """
+    Get a specific survey
+    """
+    driverSurvey(surveyDriverId: Int!, languageId: Int!): DriverSurvey
+
+    """
+    Get the trips surveys based on survey choices
+    """
+    suggestedTripsSearch(driverEmployeId: Int!, surveyId: Int!, languageId: Int!): [SuggestedTrips]
+
+    """
+    Get a specific trip survey
+    """
+    suggestedTripSurvey(surveyTripId: Int!, languageId: Int!): SuggestedTrips
+
+    """
+    Get the trips details
+    """
+    tripDetails(tripId: Int!, languageId: Int!): TripDetails
+  }
+
+  type Mutation {
+    """
+    Save a specific survey
+    """
+    driverSurvey(surveyChoices: DriverSurveyChoices!, languageId: Int!): DriverSurvey
   }
 `;
 
@@ -148,7 +230,7 @@ const survey = {
       requiredSequence: 1,
       questionType: 'NESTEDCHOICE',
       allSelected: false,
-      selectedChoices: [11,21],
+      selectedChoices: [11, 21],
       displayedChoices: [
         {
           idGroup: 1,
@@ -197,11 +279,51 @@ const survey = {
         label: '499-999 miles',
         priority: 0
       },
-        {
-          id: 999,
-          label: 'Unlimited',
-          priority: 0
-        }]
+      {
+        id: 999,
+        label: 'Unlimited',
+        priority: 0
+      }]
+    }
+  ]
+}
+
+const trips = [
+  {
+    surveyTripId: 1,
+    title: "Trips based on survey 1",
+    labelDay: "Friday March 12 2021"
+  },
+  {
+    surveyTripId: 2,
+    title: "Trips based on survey 2",
+    labelDay: "Friday April 12 2021"
+  }
+]
+
+const trip = {
+
+}
+
+const tripDetails = {
+  idTrip: 1,
+  departureDay: "Friday March 12 2021",
+  hasDangerousGoods: true,
+  drops: [
+    {
+      number: 1,
+      appointmentTime: "2021-05-13 09:00",
+      clientAddress: "170 5E AV ROUGEMONT, QC J0L 1M0 CAN"
+    },
+    {
+      number: 2,
+      appointmentTime: "2021-06-13 09:00",
+      clientAddress: "95 VULCAN ST ETOBICOKE, ON M9W 1L4 CAN"
+    },
+    {
+      number: 3,
+      appointmentTime: "2021-07-13 09:00",
+      clientAddress: "4500 RUE HICKMORE SAINT-LAURENT, QC H4T 1K2 CAN"
     }
   ]
 }
@@ -223,11 +345,27 @@ const resolvers = {
     },
   },
   Query: {
-    driverSurveysSearch: () => surveys,
+    driverSurveysSearch(parent, args, context, info) {
+      return surveys;
+    },
+    driverSurvey(parent, args, context, info) {
+      return survey;
+    },
+    suggestedTripsSearch(parent, args, context, info){
+      return trips;
+    },
+    suggestedTripSurvey(parent, args, context, info){
+      return trip;
+    },
+    tripDetails(parent, args, context, info){
+      return tripDetails;
+    }
+  },
+  Mutation: {
     driverSurvey(parent, args, context, info) {
       return survey;
     }
-  },
+  }
 };
 
 // The ApolloServer constructor requires two parameters: your schema
