@@ -1,5 +1,5 @@
 import  { ApolloServer, gql } from 'apollo-server'
-import  { surveys, survey, trips, trip, tripDetails } from './data.js';
+import  { surveys, survey, tripsSurveys, trip, tripDetails } from './data.js';
 
 //todo : finaliser la query suggestedTripSurvey
 
@@ -69,14 +69,23 @@ const typeDefs = gql`
   }
 
 
-  type SuggestedTrips{
-    surveyTripId: Int!
-    labelDay: String!,
-    title: String!
+  type TripsSurveys{
+    surveyId: Int!
+    labelDay: String!
+    title: String
+  }
+
+  type Trip{
+    id: Int!
+    destination: String!
+    deptHour: String!
+    milage: Int!
+    firstRdv: String!
+    type: String!
   }
 
   type TripDetails{
-    idTrip: Int!
+    tripId: Int!
     departureDay: String!
     hasDangerousGoods: Boolean
     drops: [Drop]
@@ -149,12 +158,12 @@ const typeDefs = gql`
     """
     Get the trips surveys based on survey choices
     """
-    suggestedTripsSearch(driverEmployeId: Int!, surveyId: Int!, languageId: Int!): [SuggestedTrips]
+    tripsSurveys(driverEmployeId: Int!, surveyId: Int!, languageId: Int!): [TripsSurveys]
 
     """
-    Get a specific trip survey
+    Get a list of suggested trips
     """
-    suggestedTripSurvey(surveyTripId: Int!, languageId: Int!): SuggestedTrips
+    suggestedTrips(driverEmployeId: Int!, surveyId: Int!, languageId: Int!): [Trip]
 
     """
     Get the trips details
@@ -193,10 +202,10 @@ const resolvers = {
     driverSurvey(parent, args, context, info) {
       return survey;
     },
-    suggestedTripsSearch(parent, args, context, info){
-      return trips;
+    tripsSurveys(parent, args, context, info){
+      return tripsSurveys;
     },
-    suggestedTripSurvey(parent, args, context, info){
+    suggestedTrips(parent, args, context, info){
       return trip;
     },
     tripDetails(parent, args, context, info){
