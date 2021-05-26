@@ -1,0 +1,26 @@
+{
+  "name": "graphqlserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "apollo-server": "^2.24.1",
+    "graphql": "^15.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inwebca/graphqlserver.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/inwebca/graphqlserver/issues"
+  },
+  "homepage": "https://github.com/inwebca/graphqlserver#readme"
+}
