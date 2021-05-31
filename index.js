@@ -1,5 +1,5 @@
 import  { ApolloServer, gql } from 'apollo-server'
-import  { surveys, survey, tripsSurveys, trip, tripDetails } from './data.js';
+import  { surveyState, surveys, survey, tripsSurveys, trip, tripDetails } from './data.js';
 
 //todo : finaliser la query suggestedTripSurvey
 
@@ -127,6 +127,15 @@ const typeDefs = gql`
     ATTRIBUTED
     CANCELED
   }
+  
+  type SurveyState{
+    state: SurveyStates
+  }
+
+  enum SurveyStates{
+    SURVEY
+    TRIPS
+  }
 
   input DriverSurveySearchCriteria {
     managerEmployeId: Int
@@ -145,6 +154,11 @@ const typeDefs = gql`
   }
   
   type Query {
+    """
+    Get survey state
+    """
+    driverSurveyState(driverEmployeId: Int!) : SurveyState
+
     """
     Get a list of surveys
     """
@@ -196,6 +210,9 @@ const resolvers = {
     },
   },
   Query: {
+    driverSurveyState(parent, args, context, info){
+      return surveyState;
+    },
     driverSurveysSearch(parent, args, context, info) {
       return surveys;
     },

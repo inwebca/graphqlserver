@@ -1,3 +1,7 @@
+export const surveyState = {
+    state: "TRIPS"
+};
+
 export const surveys = [
     {
         surveyDriverId: 1,
