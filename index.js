@@ -1,17 +1,18 @@
 import  { ApolloServer, gql } from 'apollo-server'
-import  { surveyState, surveys, survey, tripsSurveys, trip, tripDetails } from './data.js';
-
-//todo : finaliser la query suggestedTripSurvey
+import  { surveys, survey, tripsSurveys, trip, tripDetails } from './data.js';
 
 const typeDefs = gql`
   type DriverSurvey {
     surveyDriverId: Int!
     driverEmployeeId: Int
-    startDate: String
-    endDate: String
     labelDate: String
-    labelDay: String
-    hasGrief: Boolean,
+    labelClosingTime: String,
+    labelTimeLeft: String,
+  }
+
+  type SingleDriverSurvey{
+    surveyDriverId: Int!
+    driverEmployeeId: Int
     questions: [Question!]
   }
 
@@ -128,14 +129,6 @@ const typeDefs = gql`
     CANCELED
   }
   
-  type SurveyState{
-    state: SurveyStates
-  }
-
-  enum SurveyStates{
-    SURVEY
-    TRIPS
-  }
 
   input DriverSurveySearchCriteria {
     managerEmployeId: Int
@@ -154,10 +147,6 @@ const typeDefs = gql`
   }
   
   type Query {
-    """
-    Get survey state
-    """
-    driverSurveyState(driverEmployeId: Int!) : SurveyState
 
     """
     Get a list of surveys
@@ -165,9 +154,9 @@ const typeDefs = gql`
     driverSurveysSearch(criteria: DriverSurveySearchCriteria!, languageId: Int!): [DriverSurvey],
     
     """
-    Get a specific survey
+    Get a single survey
     """
-    driverSurvey(surveyDriverId: Int!, languageId: Int!): DriverSurvey
+    driverSurvey(surveyDriverId: Int!, languageId: Int!): SingleDriverSurvey
 
     """
     Get the trips surveys based on survey choices
@@ -187,9 +176,9 @@ const typeDefs = gql`
 
   type Mutation {
     """
-    Save a specific survey
+    Save a single survey
     """
-    driverSurvey(surveyChoices: DriverSurveyChoices!, languageId: Int!): DriverSurvey
+    driverSurvey(surveyChoices: DriverSurveyChoices!, languageId: Int!): SingleDriverSurvey
   }
 `;
 
@@ -210,9 +199,6 @@ const resolvers = {
     },
   },
   Query: {
-    driverSurveyState(parent, args, context, info){
-      return surveyState;
-    },
     driverSurveysSearch(parent, args, context, info) {
       return surveys;
     },

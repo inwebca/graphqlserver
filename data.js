@@ -1,27 +1,27 @@
 export const surveyState = {
-    state: "TRIPS"
+    state: "SURVEY"
 };
 
 export const surveys = [
     {
         surveyDriverId: 1,
-        labelDay: 'Saturday to Monday',
-        labelDate: 'From March 12 to March 14 2021'
+        driverEmployeeId: 123,
+        labelDate: 'From March 12 to March 14 2021',
+        labelClosingTime: 'Friday 8:00',
+        labelTimeLeft: '2 Days 10h 20min'
     },
     {
         surveyDriverId: 2,
-        labelDay: 'Saturday to Monday',
-        labelDate: 'From June 12 to June 14 2021'
-    },
-    {
-        surveyDriverId: 3,
-        labelDay: 'Saturday to Monday',
-        labelDate: 'From July 12 to July 14 2021'
+        driverEmployeeId: 123,
+        labelDate: 'From June 12 to June 14 2021',
+        labelClosingTime: 'Friday 8:00',
+        labelTimeLeft: '30 Days 10h 20min'
     }
 ];
 
 export const survey = {
     surveyDriverId: 1,
+    driverEmployeeId: 123,
     questions: [
         {
             id: 1,
