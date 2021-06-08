@@ -1,10 +1,23 @@
 import  { ApolloServer, gql } from 'apollo-server'
 import  { surveys, survey, trip, tripDetails } from './data.js';
 
-//todo : finaliser la query suggestedTripSurvey
+//labels : FR ou EN a partir de la bd ou on se sert du fichier de localisation dans le front?
+
+//Surveys
+  // Question
+  // Trip
 
 const typeDefs = gql`
-  type DriverSurvey {
+  type Survey{
+    surveyDriverId: Int!
+    labeldate: String
+    labelClosingTime: String
+    labelTimeLeft: String
+    phaseType: PhaseType!
+    state: EngineState!
+  }
+
+  type SingleSurvey {
     surveyDriverId: Int!
     driverEmployeeId: Int
     startDay: String!,
@@ -57,8 +70,8 @@ const typeDefs = gql`
   }
 
   type DisplayedChoice{
-    id: Int!,
-    label: String!,
+    id: Int!
+    label: String!
     priority: Int
   }
 
@@ -70,8 +83,15 @@ const typeDefs = gql`
   }
 
   enum PhaseType{
-    CHOICE,
+    QUESTION
     TRIP
+  }
+
+  enum EngineState{
+    OPEN
+    IN_PROCESS
+    TRIP_ASSIGNED
+    PLANNING
   }
 
   type Trip{
@@ -132,10 +152,10 @@ const typeDefs = gql`
     driverEmployeId: Int
     surveyId: Int
     surveyStatus: SurveyStatus
-    startDay: String!,
-    endDay: String!,
-    startTime: String!,
-    endTime: String!,
+    startDay: String
+    endDay: String
+    startTime: String
+    endTime: String
   }
 
   input DriverSurveyChoices{
@@ -150,12 +170,12 @@ const typeDefs = gql`
     """
     Get a list of surveys
     """
-    driverSurveysSearch(criteria: DriverSurveySearchCriteria!, languageId: Int!): [DriverSurvey],
+    driverSurveysSearch(criteria: DriverSurveySearchCriteria!, languageId: Int!): [Survey],
     
     """
     Get a specific survey
     """
-    driverSurvey(surveyDriverId: Int!, languageId: Int!): DriverSurvey
+    driverSurvey(surveyDriverId: Int!, languageId: Int!): SingleSurvey
 
     """
     Get a list of suggested trips
@@ -172,7 +192,7 @@ const typeDefs = gql`
     """
     Save a specific survey
     """
-    driverSurvey(surveyChoices: DriverSurveyChoices!, languageId: Int!): DriverSurvey
+    driverSurvey(surveyChoices: DriverSurveyChoices!, languageId: Int!): SingleSurvey
   }
 `;
 

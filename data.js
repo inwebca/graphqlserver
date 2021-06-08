@@ -1,23 +1,25 @@
 export const surveys = [
     {
         surveyDriverId: 1,
-        driverEmployeeId: 123,
-        startDay: 'June 12 2021',
-        endDay: 'June 14 2021',
-        startTime: '06:00',
-        endTime: '08:00',
-        duration: 4,
-        phaseType: 'CHOICE'
+        labeldate: "June 12 2021 to June 14 2021",
+        labelClosingTime: 'June 12 2021',
+        labelTimeLeft: '2 days',
+        phaseType: 'QUESTION',
+        state: 'OPEN'
     },
     {
         surveyDriverId: 2,
-        driverEmployeeId: 456,
-        startDay: 'July 12 2021',
-        endDay: 'July 14 2021',
-        startTime: '06:00',
-        endTime: '08:00',
-        duration: 2,
-        phaseType: 'TRIP'
+        labeldate: "June 16 2021 to June 24 2021",
+        labelClosingTime: 'June 24 2021',
+        labelTimeLeft: '2 days',
+        phaseType: 'QUESTION',
+        state: 'IN_PROCESS'
+    },
+    {
+        surveyDriverId: 3,
+        labelTimeLeft: '30 minutes',
+        phaseType: 'TRIP',
+        state: 'OPEN'
     }
 ];
 
