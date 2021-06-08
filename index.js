@@ -1,19 +1,19 @@
 import  { ApolloServer, gql } from 'apollo-server'
-import  { surveys, survey, tripsSurveys, trip, tripDetails } from './data.js';
+import  { surveys, survey, trip, tripDetails } from './data.js';
+
+//todo : finaliser la query suggestedTripSurvey
 
 const typeDefs = gql`
   type DriverSurvey {
     surveyDriverId: Int!
     driverEmployeeId: Int
-    labelDate: String
-    labelClosingTime: String,
-    labelTimeLeft: String,
-  }
-
-  type SingleDriverSurvey{
-    surveyDriverId: Int!
-    driverEmployeeId: Int
-    questions: [Question!]
+    startDay: String!,
+    endDay: String!,
+    startTime: String!,
+    endTime: String!,
+    duration: Int!,
+    phaseType: PhaseType!
+    questions: [Question]
   }
 
   interface Question{
@@ -69,11 +69,9 @@ const typeDefs = gql`
     showGroupOnly: Boolean
   }
 
-
-  type TripsSurveys{
-    surveyId: Int!
-    labelDay: String!
-    title: String
+  enum PhaseType{
+    CHOICE,
+    TRIP
   }
 
   type Trip{
@@ -129,7 +127,6 @@ const typeDefs = gql`
     CANCELED
   }
   
-
   input DriverSurveySearchCriteria {
     managerEmployeId: Int
     driverEmployeId: Int
@@ -154,14 +151,9 @@ const typeDefs = gql`
     driverSurveysSearch(criteria: DriverSurveySearchCriteria!, languageId: Int!): [DriverSurvey],
     
     """
-    Get a single survey
+    Get a specific survey
     """
-    driverSurvey(surveyDriverId: Int!, languageId: Int!): SingleDriverSurvey
-
-    """
-    Get the trips surveys based on survey choices
-    """
-    tripsSurveys(driverEmployeId: Int!, surveyId: Int!, languageId: Int!): [TripsSurveys]
+    driverSurvey(surveyDriverId: Int!, languageId: Int!): DriverSurvey
 
     """
     Get a list of suggested trips
@@ -176,9 +168,9 @@ const typeDefs = gql`
 
   type Mutation {
     """
-    Save a single survey
+    Save a specific survey
     """
-    driverSurvey(surveyChoices: DriverSurveyChoices!, languageId: Int!): SingleDriverSurvey
+    driverSurvey(surveyChoices: DriverSurveyChoices!, languageId: Int!): DriverSurvey
   }
 `;
 
@@ -204,9 +196,6 @@ const resolvers = {
     },
     driverSurvey(parent, args, context, info) {
       return survey;
-    },
-    tripsSurveys(parent, args, context, info){
-      return tripsSurveys;
     },
     suggestedTrips(parent, args, context, info){
       return trip;
