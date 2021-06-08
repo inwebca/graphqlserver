@@ -132,8 +132,10 @@ const typeDefs = gql`
     driverEmployeId: Int
     surveyId: Int
     surveyStatus: SurveyStatus
-    startDate: String
-    endDate: String
+    startDay: String!,
+    endDay: String!,
+    startTime: String!,
+    endTime: String!,
   }
 
   input DriverSurveyChoices{
