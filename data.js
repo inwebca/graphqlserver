@@ -164,17 +164,17 @@ export const tripDetails = {
     hasDangerousGoods: true,
     drops: [
         {
-            number: 1,
+            sequence: 1,
             appointmentTime: "2021-05-13 09:00",
             clientAddress: "170 5E AV ROUGEMONT, QC J0L 1M0 CAN"
         },
         {
-            number: 2,
+            sequence: 2,
             appointmentTime: "2021-06-13 09:00",
             clientAddress: "95 VULCAN ST ETOBICOKE, ON M9W 1L4 CAN"
         },
         {
-            number: 3,
+            sequence: 3,
             appointmentTime: "2021-07-13 09:00",
             clientAddress: "4500 RUE HICKMORE SAINT-LAURENT, QC H4T 1K2 CAN"
         }

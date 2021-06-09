@@ -107,7 +107,7 @@ const typeDefs = gql`
   }
 
   type Drop{
-    number: Int!
+    sequence: Int!
     appointmentTime: String!
     clientAddress: String!
   }
@@ -120,6 +120,11 @@ const typeDefs = gql`
   input SelectedDevelopmentChoice{
     id: Int!
     selectedChoice: String!
+  }
+
+  input SelectedTrip{
+    tripId: Int!
+    priority: Int!
   }
 
   enum QuestionType{
@@ -156,9 +161,11 @@ const typeDefs = gql`
 
   input DriverSurveyChoices{
     surveyDriverId: Int!
+    phaseType: PhaseType!
     questionPriority: [QuestionPriority]
     selectedDevelopmentChoice: [SelectedDevelopmentChoice]
     selectedChoices: [Int]
+    selectedTrips: [SelectedTrip]
   }
   
   type Query {
@@ -182,6 +189,14 @@ const typeDefs = gql`
   type Mutation {
     """
     Save a specific survey
+
+    Fields used for Question survey type:
+    questionPriority
+    selectedDevelopmentChoice
+    selectedChoices
+
+    Fields used for Trip survey type:
+    selectedTrips
     """
     driverSurvey(surveyChoices: DriverSurveyChoices!, languageId: Int!): SingleSurvey
   }
@@ -216,7 +231,7 @@ const resolvers = {
   },
   Mutation: {
     driverSurvey(parent, args, context, info) {
-      return survey;
+      return args.surveyChoices.surveyDriverId === 1 ? surveyQuestion : surveyTrip;
     }
   }
 };
