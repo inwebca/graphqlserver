@@ -1,5 +1,5 @@
 import  { ApolloServer, gql } from 'apollo-server'
-import  { surveys, survey, trip, tripDetails } from './data.js';
+import  { surveys, surveyQuestion, surveyTrip, tripDetails } from './data.js';
 
 //labels : FR ou EN a partir de la bd ou on se sert du fichier de localisation dans le front?
 
@@ -19,14 +19,10 @@ const typeDefs = gql`
 
   type SingleSurvey {
     surveyDriverId: Int!
-    driverEmployeeId: Int
-    startDay: String!,
-    endDay: String!,
-    startTime: String!,
-    endTime: String!,
-    duration: Int!,
+    driverEmployeeId: Int!
     phaseType: PhaseType!
     questions: [Question]
+    suggestedTrips: [Trip]
   }
 
   interface Question{
@@ -178,11 +174,6 @@ const typeDefs = gql`
     driverSurvey(surveyDriverId: Int!, languageId: Int!): SingleSurvey
 
     """
-    Get a list of suggested trips
-    """
-    suggestedTrips(driverEmployeId: Int!, surveyId: Int!, languageId: Int!): [Trip]
-
-    """
     Get the trips details
     """
     tripDetails(tripId: Int!, languageId: Int!): TripDetails
@@ -217,10 +208,7 @@ const resolvers = {
       return surveys;
     },
     driverSurvey(parent, args, context, info) {
-      return survey;
-    },
-    suggestedTrips(parent, args, context, info){
-      return trip;
+      return args.surveyDriverId === 1 ? surveyQuestion : surveyTrip;
     },
     tripDetails(parent, args, context, info){
       return tripDetails;

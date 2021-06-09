@@ -23,9 +23,10 @@ export const surveys = [
     }
 ];
 
-export const survey = {
+export const surveyQuestion = {
     surveyDriverId: 1,
-    driverEmployeeId: 123,
+    driverEmployeeId: 2,
+    phaseType: 'QUESTION',
     questions: [
         {
             id: 1,
@@ -125,32 +126,37 @@ export const survey = {
     ]
 }
 
-export const trip = [
-    {
-        id: 1,
-        destination: "Maine",
-        deptHour: "09:00",
-        milage: 300,
-        firstRdv: "19 May 11:00",
-        type: "FT"
-    },
-    {
-        id: 2,
-        destination: "Maine, New-York",
-        deptHour: "09:00",
-        milage: 300,
-        firstRdv: "19 May 11:00",
-        type: "FM - 2"
-    },
-    {
-        id: 3,
-        destination: "Maine, New-York, Florida",
-        deptHour: "09:00",
-        milage: 300,
-        firstRdv: "19 May 11:00",
-        type: "FM - 3"
-    }
-]
+export const surveyTrip = {
+    surveyDriverId: 2,
+    driverEmployeeId: 2,
+    phaseType: 'TRIP',
+    suggestedTrips: [
+        {
+            id: 1,
+            destination: "Maine",
+            deptHour: "09:00",
+            milage: 300,
+            firstRdv: "19 May 11:00",
+            type: "FT"
+        },
+        {
+            id: 2,
+            destination: "Maine, New-York",
+            deptHour: "09:00",
+            milage: 300,
+            firstRdv: "19 May 11:00",
+            type: "FM - 2"
+        },
+        {
+            id: 3,
+            destination: "Maine, New-York, Florida",
+            deptHour: "09:00",
+            milage: 300,
+            firstRdv: "19 May 11:00",
+            type: "FM - 3"
+        }
+    ]
+}
 
 export const tripDetails = {
     tripId: 1,
